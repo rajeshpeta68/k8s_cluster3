@@ -68,7 +68,7 @@ resource "aws_instance" "k8s-master" {
 }
 
 resource "aws_instance" "k8s-worker" {
-  count                  = 1
+  count                  = 2
   ami                    = data.aws_ami.latest_amazon_linux.id
   instance_type          = var.instance_type
   key_name               = var.key_name
@@ -77,4 +77,15 @@ resource "aws_instance" "k8s-worker" {
   tags = {
     Name = "k8s-worker-${count.index + 1}"
   }
+}
+
+resource "aws_eip" "k8s_master_eip" {
+  instance = aws_instance.k8s-master.id
+
+}
+
+resource "aws_eip" "k8s_worker_eip" {
+  count    = 2
+  instance = aws_instance.k8s-worker[count.index].id
+
 }
