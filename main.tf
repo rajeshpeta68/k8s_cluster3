@@ -68,7 +68,7 @@ resource "aws_instance" "k8s-master" {
 }
 
 resource "aws_instance" "k8s-worker" {
-  count                  = 2
+  count                  = 1
   ami                    = data.aws_ami.latest_amazon_linux.id
   instance_type          = var.instance_type
   key_name               = var.key_name
