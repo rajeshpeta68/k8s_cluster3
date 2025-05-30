@@ -84,3 +84,9 @@ echo "To join worker nodes, run this command on each worker node:"
 kubeadm token create --print-join-command
 
 log "All done!"
+
+#############################
+#label the nodes
+#kubectl label node ip-172-31-47-150.ap-south-1.compute.internal node-role.kubernetes.io/worker=
+#kubectl label node ip-172-31-47-155.ap-south-1.compute.internal node-role.kubernetes.io/worker=
+#install calico if nodes are not ready
