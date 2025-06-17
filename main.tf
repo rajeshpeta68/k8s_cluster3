@@ -5,14 +5,28 @@ provider "aws" {
 }
 
 
-data "aws_ami" "latest_amazon_linux" {
+data "aws_ami" "latest_amazon_linux_2023" {
   most_recent = true
-
-  owners = ["amazon"]
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+    values = ["al2023-ami-2023.7.*-x86_64"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
   }
 }
 
@@ -57,11 +71,11 @@ resource "aws_security_group" "k8s_sg" {
 }
 
 resource "aws_instance" "k8s-master" {
-  ami                    = data.aws_ami.latest_amazon_linux.id
+  ami                    = data.aws_ami.latest_amazon_linux_2023.id
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.k8s_sg.name]
-  user_data              = file("cloud-init-master.sh")
+  user_data              = file("scripts/master_setup_al3.sh")
   tags = {
     Name = "k8s-master"
   }
@@ -69,11 +83,11 @@ resource "aws_instance" "k8s-master" {
 
 resource "aws_instance" "k8s-worker" {
   count                  = 2
-  ami                    = data.aws_ami.latest_amazon_linux.id
+  ami                    = data.aws_ami.latest_amazon_linux_2023.id
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.k8s_sg.name]
-  user_data              = file("cloud-init-worker.sh")
+  user_data              = file("scripts/worker_setup_al3.sh")
   tags = {
     Name = "k8s-worker-${count.index + 1}"
   }

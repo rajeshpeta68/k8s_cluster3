@@ -81,7 +81,8 @@ echo "To check the status of Calico pods, run:"
 echo "  kubectl get pods -n kube-system"
 echo
 echo "To join worker nodes, run this command on each worker node:"
-kubeadm token create --print-join-command
+#kubeadm token create --print-join-command
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 
 log "All done!"
 
@@ -90,3 +91,11 @@ log "All done!"
 #kubectl label node ip-172-31-47-150.ap-south-1.compute.internal node-role.kubernetes.io/worker=
 #kubectl label node ip-172-31-47-155.ap-south-1.compute.internal node-role.kubernetes.io/worker=
 #install calico if nodes are not ready
+
+#control node to worker node copy
+#sudo scp -i nasa.pem /etc/kubernetes/admin.conf ec2-user@172.31.32.211:/home/ec2-user/admin.conf
+#worker node commands
+# 13  sudo mv /home/ec2-user/admin.conf ~/.kube/config
+#14  sudo chown $(id -u):$(id -g) ~/.kube/config
+#15  chmod 600 ~/.kube/config # Or 644 if multiple users on the same host, but 600 is more secure
+#16  kubectl get pods
