@@ -50,10 +50,12 @@ cp /etc/kubernetes/admin.conf /home/ec2-user/.kube/config
 chown ec2-user:ec2-user /home/ec2-user/.kube/config
 
 # Wait until API server is up
-until kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes; do
-  echo "Waiting for Kubernetes API to become ready..."
-  sleep 10
+
+until kubectl --kubeconfig=/etc/kubernetes/admin.conf get nodes &> /dev/null; do
+  echo "Waiting for API server..."
+  sleep 5
 done
 
 # Apply Calico network
-kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+#kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+#kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.3/manifests/calico.yaml

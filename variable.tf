@@ -11,7 +11,7 @@ variable "region" {
 variable "instance_type" {
   description = "The type of EC2 instance to use for the Kubernetes cluster"
   type        = string
-  default     = "t3.medium"
+  default     = "t3.2xlarge"
 
 }
 
