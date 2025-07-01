@@ -2,6 +2,8 @@
 
 set -e
 
+#hostnamectl set-hostname k8s-worker
+
 echo "[INFO] Updating system packages..."
 yum update -y
 
